@@ -1,5 +1,5 @@
 # supcom-autoreclaim
-A high performance AutoReclaim mod for Supreme Commander
+A high performance AutoReclaim mod for Supreme Commander (FAF)
 
 To play place this in your mods folder as `AutoReclaim-splitice`, by default at: `C:\ProgramData\FAForever\user\My Games\Gas Powered Games\Supreme Commander Forged Alliance\mods\AutoReclaim-splitice`
 
