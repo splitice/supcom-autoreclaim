@@ -59,11 +59,10 @@ UnitBlueprint {
         SubThreatLevel = 0,
         SurfaceThreatLevel = 0,
     },
-    Description = '<LOC xeb0204_desc>Engineering Station',
+    Description = 'Tier 4 Engineering Station',
     Display = {
         Abilities = {
             '<LOC ability_engineeringsuite>Engineering Suite',
-            '<LOC ability_upgradable>Upgradeable',
         },
         Mesh = {
             IconFadeInZoom = 130,
@@ -75,11 +74,11 @@ UnitBlueprint {
                     ShaderName = 'Seraphim',
                 },
                 {
-                    AlbedoName = 'XSBX304_lod1_albedo.dds',
+                    AlbedoName = 'XSBX404_lod1_albedo.dds',
                     LODCutoff = 300,
                     LookupName = '/textures/environment/Falloff_seraphim_lookup.dds',
                     ShaderName = 'Seraphim',
-                    SpecularName = 'XSBX304_lod1_specteam.dds',
+                    SpecularName = 'XSBX404_lod1_specteam.dds',
                 },
             },
         },
@@ -105,13 +104,13 @@ UnitBlueprint {
         UniformScale = 0.07,
     },
     Economy = {
-        BuildCostEnergy = 12500,
-        BuildCostMass = 1500,
-        BuildRate = 60,
+        BuildCostEnergy = 75000,
+        BuildCostMass = 9000,
+        BuildRate = 540,
         BuildTime = 4000,
-        MaxBuildDistance = 60,
+        MaxBuildDistance = 1000,
         RebuildBonusIds = {
-            'xsbx304',
+            'xsbx404',
         },
     },
     Footprint = {
@@ -161,7 +160,6 @@ UnitBlueprint {
         UnitName = 'Hiyathuum',
         UnitWeight = 1,
         UpgradesFrom = 'xsbx204',
-        UpgradesTo = 'xsbx404',
     },
     Intel = {
         VisionRadius = 60,

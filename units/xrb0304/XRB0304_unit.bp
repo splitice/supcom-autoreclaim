@@ -99,6 +99,7 @@ UnitBlueprint {
     Display = {
         Abilities = {
             '<LOC ability_engineeringsuite>Engineering Suite',
+            '<LOC ability_upgradable>Upgradeable',
         },
         AnimationOpen = '/mods/AutoReclaim/units/XRB0304/XRB0304_Aopen.sca',
         Mesh = {
@@ -196,6 +197,7 @@ UnitBlueprint {
         UnitName = '<LOC xrb0304_name>The Hive',
         UnitWeight = 1,
         UpgradesFrom = 'xrb0204',
+        UpgradesTo = 'xrb0404',
     },
     Intel = {
         VisionRadius = 40,

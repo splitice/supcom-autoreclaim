@@ -48,7 +48,7 @@ ReclaimCheckThread = function(self)
                 -- Check range to target
                 targetpos = v:GetPosition()
                 if VDist2(pos[1], pos[3], targetpos[1], targetpos[3]) <= bp then
-                    if IsUnit(v) then
+                    if (not v.Dead and IsUnit(v)) then
                         if IsEnemy(ourArmy, v:GetArmy()) then
                             if v:IsCapturable() then
                                 --LOG('AutoReclaim: Capturing enemy '.. tostring(maxQueue))

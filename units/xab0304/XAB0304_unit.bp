@@ -68,6 +68,7 @@ UnitBlueprint {
     Display = {
         Abilities = {
             '<LOC ability_engineeringsuite>Engineering Suite',
+            '<LOC ability_upgradable>Upgradeable',
         },
         Mesh = {
             IconFadeInZoom = 130,
@@ -163,6 +164,7 @@ UnitBlueprint {
         UnitName = 'The Prayer',
         UnitWeight = 1,
         UpgradesFrom = 'xab0204',
+        UpgradesTo = 'xab0404',
     },
     Intel = {
         VisionRadius = 50,

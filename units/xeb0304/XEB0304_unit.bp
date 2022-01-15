@@ -59,6 +59,7 @@ UnitBlueprint {
     Display = {
         Abilities = {
             '<LOC ability_engineeringsuite>Engineering Suite',
+            '<LOC ability_upgradable>Upgradeable',
         },
         Mesh = {
             IconFadeInZoom = 130,
@@ -152,6 +153,7 @@ UnitBlueprint {
         UnitName = '<LOC xeb0104_name>The Kennel',
         UnitWeight = 1,
         UpgradesFrom = 'xeb0204',
+        UpgradesTo = 'xeb0404',
     },
     Intel = {
         VisionRadius = 18,
