@@ -109,7 +109,7 @@ UnitBlueprint {
         BuildCostMass = 9000,
         BuildRate = 540,
         BuildTime = 4000,
-        MaxBuildDistance = 1000,
+        MaxBuildDistance = 100,
         RebuildBonusIds = {
             'xab0404',
         },
