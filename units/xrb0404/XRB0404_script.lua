@@ -22,7 +22,7 @@ XRB0404 = Class(CConstructionStructureUnit)
 
     OnStartBeingBuilt = function(self, builder, layer)
         CConstructionStructureUnit.OnStartBeingBuilt(self, builder, layer)
-        self:HideBone('xrb0404', true)
+        self:HideBone('xrb0304', true)
         self:ShowBone('TurretT3', true)
         self:ShowBone('Door3_B03', true)
         self:ShowBone('B03', true)
