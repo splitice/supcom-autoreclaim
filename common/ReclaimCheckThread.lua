@@ -6,21 +6,24 @@ ReclaimCheckThread = function(self)
     local reclaimEng = false
     local actioned = 0
 
-    local EndOfLoop = function(cmd)
+    local EndOfLoop = function(v)
         if actioned == 0 then
             WaitSeconds(15)
         else
             WaitSeconds(2)
         end
 
-        if cmd then
-            while not IsCommandDone(cmd) do
-                -- LOG('AutoReclaim: Not idle!')
-                WaitSeconds(1)
+        if v then
+            while not IsDestroyed(v) do
+                WaitSeconds(0.2)
+                if actioned <= 0 then
+                    break
+                end
+                actioned = actioned - 1
             end
         end
-
         actioned = 0
+
         ourArmy = self:GetArmy()
 
         -- Decide whether to start/stop reclaiming mass.
@@ -57,30 +60,13 @@ ReclaimCheckThread = function(self)
                 -- Check range to target
                 targetpos = v:GetPosition()
                 if VDist2(pos[1], pos[3], targetpos[1], targetpos[3]) <= bp then
-                    if (not v.Dead and IsUnit(v)) then
-                        if IsEnemy(ourArmy, v:GetArmy()) then
-                            if v:IsCapturable() then
-                                --LOG('AutoReclaim: Capturing enemy '.. tostring(maxQueue))
-                                cmd = IssueCapture(ourUnitArray, v)
-                                actioned = actioned + 1
-                                if actioned == 10 then
-                                    EndOfLoop(cmd)
-                                end
-                            else
-                                --LOG('AutoReclaim: Reclaiming uncapturable enemy '.. tostring(maxQueue))
-                                cmd = IssueReclaim(ourUnitArray, v)
-                                actioned = actioned + 1
-                                if actioned == 10 then
-                                    EndOfLoop(cmd)
-                                end
+                    if (not v.Dead and not IsDestroyed(v) and not IsUnit(v)) then
+                        if (reclaimMass and v.MaxMassReclaim > 0) or (reclaimEng and v.MaxEnergyReclaim > 0) then
+                            IssueReclaim(ourUnitArray, v)
+                            actioned = actioned + 1
+                            if actioned == 10 then
+                                EndOfLoop(v)
                             end
-                        end
-                    elseif (reclaimMass and v.MaxMassReclaim > 0) or (reclaimEng and v.MaxEnergyReclaim > 0) then
-                        --LOG('AutoReclaim: Reclaiming '.. tostring(maxQueue))
-                        cmd = IssueReclaim(ourUnitArray, v)
-                        actioned = actioned + 1
-                        if actioned == 10 then
-                            EndOfLoop(cmd)
                         end
                     end
                 end
