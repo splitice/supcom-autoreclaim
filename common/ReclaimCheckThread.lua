@@ -54,19 +54,25 @@ ReclaimCheckThread = function(self)
         local reclaimQueue = {}
         local ourUnitArray = {self}
         local cmd
-        for k,v in reclaimTargets do
+        local gts = GetGameTimeSeconds()
+        local threshold = gts + 60
+        for _, v in reclaimTargets do
             -- Check v is properly defined
-            if v then
+            if v and (v.IsWreckage or v.TimeReclaim)  then
                 -- Check range to target
-                targetpos = v:GetPosition()
-                if VDist2(pos[1], pos[3], targetpos[1], targetpos[3]) <= bp then
-                    if (not v.Dead and not IsDestroyed(v) and not IsUnit(v)) then
+                if (not v.Dead and not IsDestroyed(v) and not IsUnit(v)) then
+                    targetpos = v:GetPosition()
+                    if VDist2(pos[1], pos[3], targetpos[1], targetpos[3]) <= bp then
                         if (reclaimMass and v.MaxMassReclaim > 0) or (reclaimEng and v.MaxEnergyReclaim > 0) then
                             IssueReclaim(ourUnitArray, v)
                             actioned = actioned + 1
                             if actioned == 10 then
                                 EndOfLoop(v)
                             end
+                        elseif not v.expirationTime or v.expirationTime > threshold then
+                            v.expirationTime = threshold
+                        elseif v.expirationTime < gts then
+                            v:Kill()
                         end
                     end
                 end
