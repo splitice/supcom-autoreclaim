@@ -10,12 +10,12 @@ ReclaimCheckThread = function(self)
         if actioned == 0 then
             WaitSeconds(15)
         else
-            WaitSeconds(2)
+            WaitSeconds(1)
         end
 
         if v then
             while not IsDestroyed(v) do
-                WaitSeconds(0.2)
+                WaitSeconds(0.1)
                 if actioned <= 0 then
                     break
                 end
@@ -56,6 +56,24 @@ ReclaimCheckThread = function(self)
         local cmd
         local gts = GetGameTimeSeconds()
         local threshold = gts + 60
+        local numRelcaim = table.getn(reclaimTargets)
+        if numRelcaim > 200 then    
+            for i=1, numRelcaim do
+                i = i + 1
+                local v = reclaimTargets[i]
+                local previous = reclaimTargets[i - 1]
+                if v and (v.IsWreckage or v.TimeReclaim) and not v.Dead and not IsDestroyed(v) and not IsUnit(previous) and not previous.Dead and not IsDestroyed(previous) and not IsUnit(previous) then
+                    if previous and (previous.TimeReclaim or previous.IsWreckage) then
+                        previous.MaxMassReclaim = previous.MaxMassReclaim + v.MaxMassReclaim
+                        previous.MaxEnergyReclaim = previous.MaxEnergyReclaim + v.MaxEnergyReclaim
+                        previous.ReclaimLeft = (previous.ReclaimLeft + v.ReclaimLeft) / 2
+                        v:Kill()
+                        reclaimTargets[i] = nil
+                    end
+                end
+            end
+        end
+        
         for _, v in reclaimTargets do
             -- Check v is properly defined
             if v and (v.IsWreckage or v.TimeReclaim)  then
@@ -66,7 +84,7 @@ ReclaimCheckThread = function(self)
                         if (reclaimMass and v.MaxMassReclaim > 0) or (reclaimEng and v.MaxEnergyReclaim > 0) then
                             IssueReclaim(ourUnitArray, v)
                             actioned = actioned + 1
-                            if actioned == 10 then
+                            if actioned == 20 then
                                 EndOfLoop(v)
                             end
                         elseif not v.expirationTime or v.expirationTime > threshold then
