@@ -47,6 +47,7 @@ ReclaimCheckThread = function(self)
         end
     end
 
+    local reclaimSize = 2000
     while not self.Dead do
         -- Find all targets in range
         local pos = self:GetPosition()
@@ -57,23 +58,35 @@ ReclaimCheckThread = function(self)
         local gts = GetGameTimeSeconds()
         local threshold = gts + 60
         local numRelcaim = table.getn(reclaimTargets)
-        if numRelcaim > 200 then    
+        if numRelcaim > reclaimSize then    
+            LOG('AutoReclaim: Doing wreck cleanup due to '..tostring(numRelcaim)..' wrecks in range')
+            local reclaimRemaining = numRelcaim
             for i=1, numRelcaim do
-                i = i + 1
-                if i <= numRelcaim then
-                    local v = reclaimTargets[i]
-                    local previous = reclaimTargets[i - 1]
-                    if v and (v.IsWreckage or v.TimeReclaim) and not v.Dead and not IsDestroyed(v) and not IsUnit(previous) and not previous.Dead and not IsDestroyed(previous) and not IsUnit(previous) then
-                        if previous and (previous.TimeReclaim or previous.IsWreckage) then
-                            previous.MaxMassReclaim = previous.MaxMassReclaim + v.MaxMassReclaim
-                            previous.MaxEnergyReclaim = previous.MaxEnergyReclaim + v.MaxEnergyReclaim
-                            previous.ReclaimLeft = (previous.ReclaimLeft + v.ReclaimLeft) / 2
-                            v:Kill()
-                            reclaimTargets[i] = nil
+                local v = reclaimTargets[i]
+                if v and (v.IsWreckage or v.TimeReclaim) and not v.Dead and not IsDestroyed(v) then
+                    i = i + 1
+                    if i <= numRelcaim then
+                        local previous = v
+                        local v = reclaimTargets[i]
+                        if v and (v.IsWreckage or v.TimeReclaim) and not v.Dead and not IsDestroyed(v) then
+                            if previous and (previous.TimeReclaim or previous.IsWreckage) then
+                                previous.MaxMassReclaim = previous.MaxMassReclaim + v.MaxMassReclaim
+                                previous.MaxEnergyReclaim = previous.MaxEnergyReclaim + v.MaxEnergyReclaim
+                                previous.ReclaimLeft = ((previous.ReclaimLeft or 1) + (v.ReclaimLeft or 1)) / 2
+                                v:Destroy()
+                                reclaimTargets[i] = nil
+                                reclaimRemaining = reclaimRemaining - 1
+                            end
                         end
                     end
                 end
             end
+            if reclaimRemaining > 2000 then
+                reclaimSize = reclaimRemaining
+            else
+                reclaimSize = 2000
+            end
+            LOG('AutoReclaim: Wreck compact done ('..tostring(reclaimRemaining)..' wrecks left in range)')
         end
 
         for _, v in reclaimTargets do
@@ -92,7 +105,7 @@ ReclaimCheckThread = function(self)
                         elseif not v.expirationTime or v.expirationTime > threshold then
                             v.expirationTime = threshold
                         elseif v.expirationTime < gts then
-                            v:Kill()
+                            v:Destroy()
                         end
                     end
                 end
