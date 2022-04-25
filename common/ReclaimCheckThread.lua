@@ -82,7 +82,7 @@ ReclaimCheckThread = function(self)
                 end
             end
             if reclaimRemaining > 2000 then
-                reclaimSize = reclaimRemaining
+                reclaimSize = reclaimRemaining + 500
             else
                 reclaimSize = 2000
             end
